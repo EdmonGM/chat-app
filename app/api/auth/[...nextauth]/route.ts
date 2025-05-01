@@ -54,20 +54,27 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.sub = user.id;
         token.email = user.email;
+        token.picture = user.avatar;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id;
-        session.user.email = token.email;
+        session.user.id = token.sub!;
+        session.user.email = token.email!;
+        session.user.avatar = token.picture || null;
+
+        // Remove image property if it exists
+        if ("image" in session.user) {
+          delete session.user.image;
+        }
       }
       return session;
     },
   },
-  debug: process.env.NODE_ENV === "development",
+  // debug: process.env.NODE_ENV === "development",
   secret: process.env.NEXTAUTH_SECRET,
 };
 
