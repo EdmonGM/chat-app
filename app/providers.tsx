@@ -5,18 +5,17 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 
-const queryClient = new QueryClient();
-
 function Providers({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [queryClient] = React.useState(() => new QueryClient());
   return (
     <ThemeProvider
       attribute="class"
       defaultTheme="dark"
-      enableSystem={false}
+      enableSystem
       disableTransitionOnChange
     >
       <AuthProvider>
