@@ -8,16 +8,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model User {
-  id          String @id @default(cuid())
-  username    String @unique
-  password    String
-  name        String
-  avatar      String?
-  messages    Message[]
-  chatMembers ChatMember[]
-  createdAt   DateTime @default(now())
-  sentRequests FriendRequest[] @relation("SentRequests")
+  id               String @id @default(cuid())
+  username         String @unique 
+  password         String
+  name             String
+  avatar           String?
+  messages         Message[]
+  chatMembers      ChatMember[]
+  createdAt        DateTime @default(now())
+  sentRequests     FriendRequest[] @relation("SentRequests")
   receivedRequests FriendRequest[] @relation("ReceivedRequests")
+  friends          User[] @relation("Friendship")
+  friendsOf        User[] @relation("Friendship")
+  @@index([username])
 }
 
 model Message {
@@ -31,11 +34,11 @@ model Message {
 }
 
 model FriendRequest {
-  senderId  String
-  sender User @relation("SentRequests", fields: [senderId], references: [id])
+  senderId   String
+  sender     User @relation("SentRequests", fields: [senderId], references: [id])
   receiverId String
-  receiver User @relation("ReceivedRequests", fields: [receiverId], references: [id])
-  sentAt DateTime @default(now())
+  receiver   User @relation("ReceivedRequests", fields: [receiverId], references: [id])
+  sentAt     DateTime @default(now())
   @@id([senderId, receiverId])
 }
 
