@@ -8,10 +8,10 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "Enter Your Email",
+        username: {
+          label: "Username",
+          type: "username",
+          placeholder: "Enter Your Username",
         },
         password: {
           label: "Password",
@@ -20,19 +20,19 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
-          throw new Error("Email and password are required");
+        if (!credentials?.username || !credentials.password) {
+          throw new Error("Username and password are required");
         }
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+          where: { username: credentials.username },
         });
 
         if (!user) {
           const hashedPassword = await bcrypt.hash(credentials.password, 10);
           const newUser = await prisma.user.create({
             data: {
-              email: credentials.email,
-              name: credentials.email.split("@")[0],
+              username: credentials.username,
+              name: credentials.username,
               password: hashedPassword,
             },
           });
@@ -55,7 +55,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
-        token.email = user.email;
+        token.name = user.username;
         token.picture = user.avatar;
       }
       return token;
@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub!;
-        session.user.email = token.email!;
+        session.user.username = token.name!;
         session.user.avatar = token.picture || null;
 
         // Remove image property if it exists
