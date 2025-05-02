@@ -16,6 +16,8 @@ model User {
   messages    Message[]
   chatMembers ChatMember[]
   createdAt   DateTime @default(now())
+  sentRequests FriendRequest[] @relation("SentRequests")
+  receivedRequests FriendRequest[] @relation("ReceivedRequests")
 }
 
 model Message {
@@ -26,6 +28,15 @@ model Message {
   senderId String
   sender   User @relation(fields: [senderId], references: [id])
 
+}
+
+model FriendRequest {
+  senderId  String
+  sender User @relation("SentRequests", fields: [senderId], references: [id])
+  receiverId String
+  receiver User @relation("ReceivedRequests", fields: [receiverId], references: [id])
+  sentAt DateTime @default(now())
+  @@id([senderId, receiverId])
 }
 
 model ChatRoom {
