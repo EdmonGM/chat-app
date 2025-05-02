@@ -2,7 +2,7 @@ import React from "react";
 import {
   Sidebar,
   SidebarContent,
-  SidebarHeader,
+  SidebarFooter,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -11,6 +11,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import AppSidebarItem from "./app-sidebar-item";
+import Image from "next/image";
+import Link from "next/link";
 
 async function AppSidebar() {
   const items = [
@@ -37,21 +39,6 @@ async function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuButton className="h-24">
-            <Avatar className="size-16">
-              <AvatarImage src={session?.user.avatar || undefined} />
-              <AvatarFallback className="text-2xl select-none">
-                {session?.user.name.slice(0, 2)}
-              </AvatarFallback>
-            </Avatar>
-            <SidebarMenuItem>
-              <span className="text-lg">{session?.user.name}</span>
-            </SidebarMenuItem>
-          </SidebarMenuButton>
-        </SidebarMenu>
-      </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
           {items.map((item) => (
@@ -59,6 +46,48 @@ async function AppSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu className="flex-row h-14 items-center border-red-500 border-2">
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <Link href="/profile">
+                <Avatar>
+                  <AvatarImage src={session?.user.avatar || undefined} />
+                  <AvatarFallback className="text-xl select-none">
+                    {session?.user.name.slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <Link href="/friends">
+                <Image
+                  src="/contact.svg"
+                  alt="F"
+                  title="Friends"
+                  width={28}
+                  height={28}
+                />
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <Link href="/users">
+                <Image
+                  src="/user-search.svg"
+                  alt="S"
+                  title="Search Users"
+                  width={28}
+                  height={28}
+                />
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
