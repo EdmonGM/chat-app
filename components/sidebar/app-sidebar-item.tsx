@@ -14,7 +14,6 @@ type Item = {
 
 function AppSidebarItem({ id, name, lastMessage, avatar }: Item) {
   const { chatId } = useParams();
-  console.log(chatId);
 
   return (
     <SidebarMenuItem>
