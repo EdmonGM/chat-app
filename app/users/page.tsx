@@ -18,6 +18,7 @@ import { z } from "zod";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import LoadingLogo from "@/components/ui/logo";
 
 const formSchema = z.object({
   username: z
@@ -79,15 +80,7 @@ function page() {
       </Form>
       <Separator />
       {isFetching ? (
-        <div className="w-full">
-          <Image
-            src="/logo.svg"
-            alt="logo"
-            width={120}
-            height={120}
-            className="animate-pulse mx-auto"
-          />
-        </div>
+        <LoadingLogo />
       ) : (
         users.length > 0 && <UsersSearchTable users={users} />
       )}
