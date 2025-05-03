@@ -10,7 +10,6 @@ export async function POST(req: NextRequest) {
   }
 
   const { action, senderId } = await req.json();
-  console.log(action, senderId);
 
   if (!action || !senderId) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
