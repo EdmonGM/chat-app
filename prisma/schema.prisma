@@ -30,7 +30,6 @@ model Message {
   chat     ChatRoom @relation(fields: [chatId], references: [id])
   senderId String
   sender   User @relation(fields: [senderId], references: [id])
-
 }
 
 model FriendRequest {
@@ -45,7 +44,6 @@ model FriendRequest {
 model ChatRoom {
   id        String @id @default(cuid())
   name      String?
-  // TODO: Add isGroup Boolean
   members   ChatMember[]
   messages  Message[]
   createdAt DateTime @default(now())
