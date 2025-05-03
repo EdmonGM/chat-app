@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,44 +9,22 @@ import {
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import AppSidebarItem from "./app-sidebar-item";
 import Image from "next/image";
 import Link from "next/link";
+import AppSidebarChats from "./app-sidebar-chats";
+import { Separator } from "../ui/separator";
 
 async function AppSidebar() {
-  const items = [
-    {
-      id: "1",
-      name: "Chat 1",
-      lastMessage: "hello",
-      avatar: null,
-    },
-    {
-      id: "2",
-      name: "Chat 2",
-      lastMessage: "welcome",
-      avatar: null,
-    },
-    {
-      id: "3",
-      name: "Chat 3",
-      lastMessage: "bye",
-      avatar: null,
-    },
-  ];
   const session = await getServerSession(authOptions);
 
   return (
     <Sidebar>
       <SidebarContent>
-        <SidebarMenu>
-          {items.map((item) => (
-            <AppSidebarItem {...item} key={item.id} />
-          ))}
-        </SidebarMenu>
+        <AppSidebarChats />
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu className="flex-row h-14 items-center border-red-500 border-2">
+        <Separator />
+        <SidebarMenu className="flex-row h-14 items-center">
           <SidebarMenuItem>
             <SidebarMenuButton>
               <Link href="/profile">
