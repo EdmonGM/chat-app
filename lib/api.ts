@@ -1,4 +1,4 @@
-import { IFriend, IFriendRequest, IUser } from "@/types/next-auth";
+import { IChatRoom, IFriend, IFriendRequest, IUser } from "@/types/types";
 import axios from "axios";
 
 const api = axios.create({
@@ -20,28 +20,28 @@ api.interceptors.response.use(
 export const searchUsers = async (username: string): Promise<IUser[]> =>
   await api.get(`/users/search?query=${encodeURIComponent(username)}`);
 
-export const sendFriendRequest = async (
-  senderId: string,
-  receiverId: string
-): Promise<void> =>
-  await api.post(
-    `/users/${senderId}/friends/requests/new?receiverId=${receiverId}`
-  );
+export const sendFriendRequest = async (receiverId: string): Promise<void> =>
+  await api.post(`/users/friends/requests/new?receiverId=${receiverId}`);
 
-export const getFriendRequests = async (
-  userId: string
-): Promise<IFriendRequest[]> =>
-  await api.get(`/users/${userId}/friends/requests/new`);
+export const getFriendRequests = async (): Promise<IFriendRequest[]> =>
+  await api.get(`/users/friends/requests/new`);
 
 export const respondToFriendRequest = async (
-  id: string,
   action: "accept" | "reject",
   senderId: string
 ): Promise<void> =>
-  api.post(`/users/${id}/friends/requests`, {
+  api.post(`/users/friends/requests`, {
     action: action,
     senderId: senderId,
   });
 
-export const getAllFriends = async (id: string): Promise<IFriend[]> =>
-  await api.get(`/users/${id}/friends`);
+export const getAllFriends = async (): Promise<IFriend[]> =>
+  await api.get(`/users/friends`);
+
+export const getUserChats = async (): Promise<IChatRoom[]> =>
+  await api.get("/chat");
+
+export const createChatRoom = async (
+  secondUserId: string
+): Promise<IChatRoom> =>
+  await api.post("/chat", { secondUserId: secondUserId });
