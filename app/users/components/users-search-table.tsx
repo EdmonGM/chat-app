@@ -8,16 +8,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { sendFriendRequest } from "@/lib/api";
-import { IUser } from "@/types/next-auth";
+import { IUser } from "@/types/types";
 import { useMutation } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 function UsersSearchTable({ users }: { users: IUser[] }) {
-  const { data: session } = useSession();
   const { mutateAsync } = useMutation({
     mutationKey: ["requests"],
-    mutationFn: (id: string) => sendFriendRequest(session?.user.id!, id),
+    mutationFn: (id: string) => sendFriendRequest(id),
   });
 
   return (

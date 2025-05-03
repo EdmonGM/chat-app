@@ -2,29 +2,22 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { getFriendRequests, respondToFriendRequest } from "@/lib/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { Ban, Check } from "lucide-react";
 
 function FriendRequests() {
-  const { data: session } = useSession();
   const { data: requests = [] } = useQuery({
     queryKey: ["requests"],
-    queryFn: () => getFriendRequests(session?.user.id!),
+    queryFn: () => getFriendRequests(),
   });
   const { mutateAsync } = useMutation({
     mutationKey: ["requests"],
     mutationFn: (variables: {
       action: "accept" | "reject";
       senderId: string;
-    }) =>
-      respondToFriendRequest(
-        session?.user.id!,
-        variables.action,
-        variables.senderId
-      ),
+    }) => respondToFriendRequest(variables.action, variables.senderId),
   });
 
   if (requests.length < 1) return;
